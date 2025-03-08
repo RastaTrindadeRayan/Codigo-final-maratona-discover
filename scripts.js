@@ -5,8 +5,8 @@ const Modal = {
     document.querySelector(".modal-overlay").classList.add("active")
   },
   close() {
-    // fechar o modal
-    // remover a class active do modal
+    // Fechar o modal
+    // Remover a class active do modal
     document.querySelector(".modal-overlay").classList.remove("active")
   },
 }
@@ -29,17 +29,16 @@ const Transaction = {
 
   add(transaction) {
     Transaction.all.push(transaction)
-
     App.reload()
   },
 
   remove(index) {
     Transaction.all.splice(index, 1)
-
     App.reload()
   },
 
   incomes() {
+    // Somar as entradas
     let income = 0
     Transaction.all.forEach((transaction) => {
       if (transaction.amount > 0) {
@@ -50,6 +49,7 @@ const Transaction = {
   },
 
   expenses() {
+    // Somar as saÃ­das
     let expense = 0
     Transaction.all.forEach((transaction) => {
       if (transaction.amount < 0) {
@@ -60,13 +60,13 @@ const Transaction = {
   },
 
   total() {
+    // Entradas - SaÃ­das
     return Transaction.incomes() + Transaction.expenses()
   },
 }
 
 const DOM = {
   transactionsContainer: document.querySelector("#data-table tbody"),
-
   addTransaction(transaction, index) {
     const tr = document.createElement("tr")
     tr.innerHTML = DOM.innerHTMLTransaction(transaction, index)
@@ -77,7 +77,6 @@ const DOM = {
 
   innerHTMLTransaction(transaction, index) {
     const CSSclass = transaction.amount > 0 ? "income" : "expense"
-
     const amount = Utils.formatCurrency(transaction.amount)
 
     const html = `
@@ -85,10 +84,9 @@ const DOM = {
         <td class="${CSSclass}">${amount}</td>
         <td class="date">${transaction.date}</td>
         <td>
-            <img onclick="Transaction.remove(${index})" src="./assets/minus.svg" alt="Remover transação">
+            <img onclick="Transaction.remove(${index})" src="./assets/minus.svg" alt="Remover transaÃ§Ã£o">
         </td>
         `
-
     return html
   },
 
@@ -111,13 +109,14 @@ const DOM = {
 
 const Utils = {
   formatAmount(value) {
-    value = Number(value.replace(/\,\./g, "")) * 100
+    value = Number(value) * 100
 
     return value
   },
 
   formatDate(date) {
     const splittedDate = date.split("-")
+
     return `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]}`
   },
 
@@ -132,7 +131,6 @@ const Utils = {
       style: "currency",
       currency: "BRL",
     })
-
     return signal + value
   },
 }
@@ -166,9 +164,7 @@ const Form = {
     let { description, amount, date } = Form.getValues()
 
     amount = Utils.formatAmount(amount)
-
     date = Utils.formatDate(date)
-
     return {
       description,
       amount,
@@ -205,6 +201,7 @@ const App = {
 
     Storage.set(Transaction.all)
   },
+
   reload() {
     DOM.clearTransactions()
     App.init()
